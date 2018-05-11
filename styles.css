@@ -1,0 +1,16 @@
+#getText {
+     
+       display: flex; 
+justify-content: center;
+}
+
+.fb-login-button {
+        
+        display: flex; 
+        justify-content: center;
+        
+}
+
+#fbstatus {
+        text-align: center;
+}

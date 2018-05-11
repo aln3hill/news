@@ -1,0 +1,118 @@
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Fetch API Sandbox</title>
+                <link rel="stylesheet" href="styles.css">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+        </head>
+        <body>
+                <script>
+                        //initiating FB connection
+                        window.fbAsyncInit = function() {
+                        FB.init({
+                                appId            : '170583610306376',
+                                autoLogAppEvents : true,
+                                xfbml            : true,
+                                version          : 'v2.12'
+                        });
+                        //checking if logged in to Facebook
+                        FB.getLoginStatus(function(response){
+                                console.log(response);
+                                if (response.status === 'connected'){
+                                        document.getElementById('fbstatus').innerHTML = "You are logged into Facebook!"  
+                                }
+                                else if (response.status ==='not_authorized'){
+                                        document.getElementById('fbstatus').innerHTML = "You are  not logged into this app via Facebook!"
+                                }
+                                else if (response.status ==='unknown'){
+                                        document.getElementById('fbstatus').innerHTML = "You are  not logged into Facebook or this app!"
+                                }
+                        })
+                };
+
+                (function(d, s, id){
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) {return;}
+                        js = d.createElement(s); js.id = id;
+                        js.src = "https://connect.facebook.net/en_US/sdk.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));
+                </script>
+                
+                <!-- Initating FB login --> 
+                <div id="fb-root"></div> 
+                        
+                <script>
+                (function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                                if (d.getElementById(id)) return;
+                                        js = d.createElement(s); js.id = id;
+                                        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0&appId=170583610306376&autoLogAppEvents=1';
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                }
+                        (document, 'script', 'facebook-jssdk'));
+                </script>
+                
+<!-- HTML CODE BELOW -->                
+               <!-- <h1 class="text-center">Welcome!</h1>-->
+                <h1 class="text-center"><img src="untitled.png"alt="Picture with News text"></h1>
+                <h2 class="text-center">Here you will get the latest news easily</h2>
+                <h3 class="text-center">Just click the button below, and we'll get you up to speed</h3>
+                <div class = "container" style="text-align:center" id="fbstatus"></div>
+                <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="true" ></div><br>
+                <div class="fb-like" data-href="www.facebook.com" data-width="15" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true">Like me here</div>
+                <button class="btn btn-outline-success" id="getText">Get News</button>
+                <div class = "container" id="output"></div>
+                
+                 
+
+                <script>
+              //  document.getElementById('getText').addEventListener('onClick', getNews());
+                var button = document.getElementById('getText');
+                button.onclick = getNews;
+                        
+                function getNews(){
+                        var url = 'https://newsapi.org/v2/top-headlines?' +
+                        'country=us&' +
+                        'apiKey=8d361d92ba2f4386b4fca712a4b2eec1';
+                        var req = new Request(url);
+                        fetch(req)
+                                .then(function(response) {
+                                return response.json();
+                                })
+
+                                .then(function(data){
+                                //console.log(data);
+                                let newsList = document.createElement("ul");
+                                newsList.className = 'card-body';
+                                let output = document.getElementById("output");
+                                output.appendChild(newsList);
+                                for(let i = 0; i < data.totalResults; i++){
+                                        let title = data.articles[i].title;
+                                        let author = data.articles[i].author;
+                                        let desc = data.articles[i].description;
+                                        let published = data.articles[i].publishedAt;
+                                        let url = data.articles[i].url;
+                                        
+
+                                        let newsItem = document.createElement("li");
+                                        newsItem.className = 'list-group-item list-group-item-action';
+                                        newsItem.innerHTML ='<a href="' + url + '">' + "Title: " + title + "   Author: " + author + "     Description: " + desc + "   Published: " + published + "</a>";
+                                       // newsItem.innerHTML = '<div class="fb-like" data-href="www.facebook.com" data-width="15" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>';
+                                        newsList.appendChild(newsItem);
+
+
+                                        }
+                                })
+                                .catch((error) => console.log("Error!"))
+                }
+                </script>
+
+        </body>      
+        </html>
